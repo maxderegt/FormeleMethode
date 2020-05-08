@@ -30,8 +30,7 @@ namespace FormeleMethode
                     }
                 }
             }
-            bool returnvalue = (node.nodeType == NodeType.EndNode || Endnode);
-            return returnvalue;
+            return (node.nodeType == NodeType.EndNode || Endnode);
         }
 
 
