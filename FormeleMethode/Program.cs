@@ -226,6 +226,18 @@ namespace FormeleMethode
 
             CreateGraph(regularexpressionexample, "regularexpressionexample");
 
+
+            Console.WriteLine("");
+            Console.WriteLine("---------- Regular expression ------------");
+            Console.WriteLine("----------      (a|bc)*       -----------");
+            Regex regex = new Regex(@"(a|bc)*");
+
+
+            foreach (string item in strings)
+            {
+                Console.WriteLine(regex.Check(item));
+            }
+
             Console.ReadLine();
 
         }
@@ -291,7 +303,6 @@ namespace FormeleMethode
             var dot = graph.Compile();
             dot = dot.Insert(10 + name.Length, "rankdir=\"LR\";");
             File.WriteAllText(name + ".dot", dot);
-
         }
     }
 }
