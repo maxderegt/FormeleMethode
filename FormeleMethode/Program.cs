@@ -21,8 +21,6 @@ namespace FormeleMethode
         {
             List<string> strings = GenerateStrings.GenerateString(5);
 
-            //Console.SetWindowSize(80, 30);
-
             Console.WriteLine("---------- DFA -------------");
             Console.WriteLine("---- begins with babaa -----");
             List<Node> DFA_BWB_ABAA_Nodes = new List<Node>()
@@ -188,7 +186,45 @@ namespace FormeleMethode
 
 
             CreateGraph(NDFA_C_AAoBB_Nodes, "NDFACAAoBB");
-            
+
+
+            Console.WriteLine("---- regularexpressionexample -----");
+            List<Node> regularexpressionexample = new List<Node>()
+            {
+                new Node("q0", NodeType.StartNode),
+                new Node("q1", NodeType.NormalNode),
+                new Node("q2", NodeType.NormalNode),
+                new Node("q3", NodeType.NormalNode),
+                new Node("q4", NodeType.EndNode),
+            };
+            regularexpressionexample[0].AddConnections(new List<Connection>()
+            {
+                new Connection('+', regularexpressionexample[1]),
+                new Connection('+', regularexpressionexample[4])
+            });
+            regularexpressionexample[1].AddConnections(new List<Connection>()
+            {
+                new Connection('a', regularexpressionexample[3]),
+                new Connection('b', regularexpressionexample[2])
+            });
+            regularexpressionexample[2].AddConnections(new List<Connection>()
+            {
+                new Connection('c', regularexpressionexample[3])
+            });
+            regularexpressionexample[3].AddConnections(new List<Connection>()
+            {
+                new Connection('+', regularexpressionexample[4]),
+                new Connection('+', regularexpressionexample[1])
+            });
+            regularexpressionexample[4].AddConnections(new List<Connection>());
+
+            NDFA NDFAregularexpression = new NDFA(new List<Node>() { regularexpressionexample[0] });
+            foreach (string item in strings)
+            {
+                Console.WriteLine(NDFAregularexpression.Check(item));
+            }
+
+            CreateGraph(regularexpressionexample, "regularexpressionexample");
 
             Console.ReadLine();
 

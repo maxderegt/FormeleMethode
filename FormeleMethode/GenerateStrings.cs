@@ -6,7 +6,10 @@ using System.Text;
 
 namespace FormeleMethode
 {
-    class GenerateStrings
+	//https://algorithms.tutorialhorizon.com/generate-all-strings-of-n-bits/
+
+
+	class GenerateStrings
     {
 		static string[] arrA;
 		static List<string> strings = new List<string>();
@@ -21,6 +24,8 @@ namespace FormeleMethode
 				arrA[n - 1] = "a";
 				nBits(n - 1);
 				arrA[n - 1] = "b";
+				nBits(n - 1);
+				arrA[n - 1] = "c";
 				nBits(n - 1);
 			}
 		}

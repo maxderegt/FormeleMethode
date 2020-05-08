@@ -28,10 +28,49 @@ namespace FormeleMethode
                         if (Endnode == true)
                             return true;
                     }
+                    else if (connection.letter.Equals('+'))
+                    {
+                        Connection connection2 = CheckForEpsilon(connection.node, character);
+                        if(connection2 != null)
+                        {
+                            Endnode = check(connection2.node, i + 1, s);
+                            if (Endnode == true)
+                                return true;
+                        }
+                    }
                 }
             }
-            bool returnvalue = (node.nodeType == NodeType.EndNode || Endnode);
+            if (i < s.Length)
+                return false;
+
+            bool EpsilonAsEndNode = false;
+            foreach (Connection connection1 in node.connections)
+            {
+                if (connection1.node.nodeType == NodeType.EndNode)
+                    EpsilonAsEndNode = true;
+            }
+            bool returnvalue = (node.nodeType == NodeType.EndNode || Endnode || EpsilonAsEndNode);
             return returnvalue;
+        }
+
+        private Connection CheckForEpsilon(Node node, char character)
+        {
+            foreach (Connection connection in node.connections)
+            {
+                if (connection.letter.Equals(character))
+                {
+                    return connection;
+                }
+                else if (connection.letter.Equals('+'))
+                {
+                    Connection connection2 = CheckForEpsilon(connection.node, character);
+                    if (connection2 != null)
+                        return connection2;
+                    else
+                        return null;
+                }
+            }
+            return null;
         }
 
 
