@@ -19,7 +19,7 @@ namespace FormeleMethode
 
         public Program()
         {
-            List<string> strings = GenerateStrings.GenerateString(5);
+            List<string> strings = GenerateStrings.GenerateString(5, "abc");
 
             Console.WriteLine("---------- DFA -------------");
             Console.WriteLine("---- begins with babaa -----");
