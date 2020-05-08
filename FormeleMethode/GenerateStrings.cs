@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace FormeleMethode
@@ -10,6 +11,7 @@ namespace FormeleMethode
     {
 		static string[] arrA;
 		static List<string> strings = new List<string>();
+		static string letters;
 		static private void nBits(int n)
 		{
 			if (n <= 0)
@@ -18,15 +20,17 @@ namespace FormeleMethode
 			}
 			else
 			{
-				arrA[n - 1] = "a";
-				nBits(n - 1);
-				arrA[n - 1] = "b";
-				nBits(n - 1);
+				foreach (char letter in letters)
+				{
+					arrA[n - 1] = letter.ToString();
+					nBits(n - 1);
+				}
 			}
 		}
 
-		public static List<String> GenerateString(int i)
+		public static List<String> GenerateString(int i, string alphabet)
 		{
+			letters = alphabet;
 			strings.Clear();
 			arrA = new string[i];
 			nBits(i);

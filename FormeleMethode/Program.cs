@@ -19,7 +19,7 @@ namespace FormeleMethode
 
         public Program()
         {
-            List<string> strings = GenerateStrings.GenerateString(5);
+            List<string> strings = GenerateStrings.GenerateString(5, "abc");
 
             //Console.SetWindowSize(80, 30);
 
