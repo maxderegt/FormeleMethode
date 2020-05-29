@@ -20,6 +20,14 @@ namespace FormeleMethode
             if (i < chararr.Length)
             {
                 char character = chararr[i];
+                if (node.connections.Count == 0) //let's assume since there are no connections that this is the end of the check
+                {
+                    if (node.nodeType == NodeType.EndNode)
+                        return true;
+                    else 
+                        return false;
+                }
+
                 foreach (Connection connection in node.connections)
                 {
                     if (connection.letter.Equals(character))
@@ -28,7 +36,7 @@ namespace FormeleMethode
                         if (Endnode == true)
                             return true;
                     }
-                    else if (connection.letter.Equals('+'))
+                    else if (connection.letter.Equals('ϵ'))
                     {
                         Connection connection2 = CheckForEpsilon(connection.node, character);
                         if(connection2 != null)
@@ -61,7 +69,7 @@ namespace FormeleMethode
                 {
                     return connection;
                 }
-                else if (connection.letter.Equals('+'))
+                else if (connection.letter.Equals('ϵ'))
                 {
                     Connection connection2 = CheckForEpsilon(connection.node, character);
                     if (connection2 != null)

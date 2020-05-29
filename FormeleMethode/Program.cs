@@ -20,7 +20,7 @@ namespace FormeleMethode
         public Program()
         {
             List<string> strings = GenerateStrings.GenerateString(5, "abc");
-
+            /*
             Console.WriteLine("---------- DFA -------------");
             Console.WriteLine("---- begins with babaa -----");
             List<Node> DFA_BWB_ABAA_Nodes = new List<Node>()
@@ -199,8 +199,8 @@ namespace FormeleMethode
             };
             regularexpressionexample[0].AddConnections(new List<Connection>()
             {
-                new Connection('+', regularexpressionexample[1]),
-                new Connection('+', regularexpressionexample[4])
+                new Connection('ϵ', regularexpressionexample[1]),
+                new Connection('ϵ', regularexpressionexample[4])
             });
             regularexpressionexample[1].AddConnections(new List<Connection>()
             {
@@ -213,8 +213,8 @@ namespace FormeleMethode
             });
             regularexpressionexample[3].AddConnections(new List<Connection>()
             {
-                new Connection('+', regularexpressionexample[4]),
-                new Connection('+', regularexpressionexample[1])
+                new Connection('ϵ', regularexpressionexample[4]),
+                new Connection('ϵ', regularexpressionexample[1])
             });
             regularexpressionexample[4].AddConnections(new List<Connection>());
 
@@ -223,21 +223,24 @@ namespace FormeleMethode
             {
                 Console.WriteLine(NDFAregularexpression.Check(item));
             }
-
             CreateGraph(regularexpressionexample, "regularexpressionexample");
-
+            */
 
             Console.WriteLine("");
-            Console.WriteLine("---------- Regular expression ------------");
-            Console.WriteLine("----------      (a|bc)*       -----------");
-            Regex regex = new Regex(@"(a|bc)*");
+            Console.WriteLine("---------- Regular expression tester with Regex and Thompson ------------");
+            Console.WriteLine("----------                        (a|bc)*                    -----------");
+            RegexTester regexTester = new RegexTester(@"(a|bc)*");
+            RegExp reg = new RegExp("a").or(new RegExp("b"));
+            Console.WriteLine("REGEX: " + reg.ToString());
 
-
+            List<Node> ndfa = Thompson.CreateAutomaat(reg);
+            NDFA NDFAregularexpression = new NDFA(new List<Node>() { ndfa[0] });
             foreach (string item in strings)
             {
-                Console.WriteLine(regex.Check(item));
+                Console.WriteLine(NDFAregularexpression.Check(item));
             }
 
+            CreateGraph(ndfa, "RegExb");
             Console.ReadLine();
 
         }

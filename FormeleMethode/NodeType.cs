@@ -4,7 +4,7 @@ using System.Text;
 
 namespace FormeleMethode
 {
-	enum NodeType
+	public enum NodeType
 	{
 		StartNode = 0,
 		EndNode = 1,
