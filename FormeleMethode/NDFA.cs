@@ -58,14 +58,28 @@ namespace FormeleMethode
                 return false;
 
             bool EpsilonAsEndNode = false;
-            foreach (Connection connection1 in node.connections)
-            {
-                if(connection1.letter.Equals('ϵ'))
-                    if (connection1.node.nodeType == NodeType.EndNode)
-                        EpsilonAsEndNode = true;
-            }
+            EpsilonAsEndNode = Episilonasendnode(node);
             bool returnvalue = (node.nodeType == NodeType.EndNode || Endnode || EpsilonAsEndNode);
             return returnvalue;
+        }
+
+        private bool Episilonasendnode(Node node)
+        {
+            bool EpsilonAsEndNode = false;
+            foreach (Connection connection1 in node.connections)
+            {
+                if (connection1.letter.Equals('ϵ'))
+                {
+                    if (connection1.node.nodeType == NodeType.EndNode)
+                    {
+                        EpsilonAsEndNode = true;
+                        break;
+                    }
+                    Episilonasendnode(connection1.node);
+                }
+            }
+
+            return EpsilonAsEndNode;
         }
 
         private Connection CheckForEpsilon(Node node, char character)
