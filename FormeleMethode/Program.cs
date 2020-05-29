@@ -7,11 +7,14 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Text;
 
 namespace FormeleMethode
 {
     class Program
     {
+        StringBuilder batfile = new StringBuilder();
+
         static void Main(string[] args)
         {
             Program program = new Program();
@@ -227,6 +230,7 @@ namespace FormeleMethode
             */
 
             Console.WriteLine("");
+
             Console.WriteLine("---------- Regular expression tester with Regex and Thompson ------------");
             Console.WriteLine("----------                        (a|bc)*                    -----------");
             RegexTester regexTester = new RegexTester(@"(a|bc)*");
@@ -235,14 +239,19 @@ namespace FormeleMethode
 
             List<Node> ndfa = Thompson.CreateAutomaat(reg);
             NDFA NDFAregularexpression = new NDFA(new List<Node>() { ndfa[0] });
+
             foreach (string item in strings)
             {
                 Console.WriteLine(NDFAregularexpression.Check(item));
             }
 
-            CreateGraph(ndfa, "RegExb");
-            Console.ReadLine();
 
+            CreateGraph(ndfa, "RegExb");
+
+            File.WriteAllText("pdf.bat", batfile.ToString());
+            System.Diagnostics.Process.Start("pdf.bat");
+
+            Console.ReadLine();
         }
 
         public void CreateGraph(List<Node> nodes, string name)
@@ -306,6 +315,7 @@ namespace FormeleMethode
             var dot = graph.Compile();
             dot = dot.Insert(10 + name.Length, "rankdir=\"LR\";");
             File.WriteAllText(name + ".dot", dot);
+            batfile.AppendLine($"dot -T pdf {name}.dot -O");
         }
     }
 }
