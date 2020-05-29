@@ -50,27 +50,6 @@ namespace FormeleMethode
             right = null;
         }
 
-        /*
-        public void ViewImage(bool minimizedDFA)
-        {
-            var a = Thompson.CreateAutomaat(this);
-            if (minimizedDFA)
-                Graphviz.PrintGraph(NdfatoDfa.MakeDfa(a).MinimizeReverse(), "test");
-            else
-                Graphviz.PrintGraph(a, "test");
-
-        }
-
-        public override bool Equals(object obj)
-        {
-            var reg = (RegExp)obj;
-            if (reg == null) return false;
-            var automate1 = NdfatoDfa.MakeDfa(Thompson.CreateAutomaat(this)).MinimizeHopCroft(false);
-            var automate2 = NdfatoDfa.MakeDfa(Thompson.CreateAutomaat(reg)).MinimizeHopCroft(false);
-            return automate1.Equals(automate2);
-        }
-        */
-
         public RegExp plus()
         {
             RegExp result = new RegExp();

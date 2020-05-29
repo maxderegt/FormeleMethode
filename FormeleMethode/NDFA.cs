@@ -75,7 +75,7 @@ namespace FormeleMethode
                         EpsilonAsEndNode = true;
                         break;
                     }
-                    Episilonasendnode(connection1.node);
+                    EpsilonAsEndNode = Episilonasendnode(connection1.node);
                 }
             }
 
@@ -95,8 +95,6 @@ namespace FormeleMethode
                     Connection connection2 = CheckForEpsilon(connection.node, character);
                     if (connection2 != null)
                         return connection2;
-                    else
-                        return null;
                 }
             }
             return null;

@@ -22,7 +22,7 @@ namespace FormeleMethode
 
         public Program()
         {
-            List<string> strings = GenerateStrings.GenerateString(5, "abc");
+            List<string> strings = GenerateStrings.GenerateString(5, "ab");
             
             Console.WriteLine("---------- DFA -------------");
             Console.WriteLine("---- begins with babaa -----");
@@ -202,8 +202,12 @@ namespace FormeleMethode
 
             CreateGraph(NDFA_C_AAoBB_Nodes, "NDFACAAoBB");
 
-
             Console.WriteLine("---- regularexpressionexample -----");
+
+
+            strings.Clear();
+            strings = GenerateStrings.GenerateString(5, "abc");
+
             List<Node> regularexpressionexample = new List<Node>()
             {
                 new Node("q0", NodeType.StartNode),
@@ -240,9 +244,6 @@ namespace FormeleMethode
             }
             CreateGraph(regularexpressionexample, "regularexpressionexample");
             
-
-            Console.WriteLine("");
-
             Console.WriteLine("---------- Regular expression tester with Regex and Thompson ------------");
             Console.WriteLine("----------                        (a|bc)*                    -----------");
             RegexTester regexTester = new RegexTester(@"(a|bc)*");
@@ -255,7 +256,7 @@ namespace FormeleMethode
             foreach (string item in strings)
             {
                 Console.WriteLine(NDFAregularexpression2.Check(item));
-                Console.WriteLine("Regex test: " + regexTester.Check(item));
+                //Console.WriteLine("Regex test: " + regexTester.Check(item));
             }
 
 
@@ -280,9 +281,22 @@ namespace FormeleMethode
                     {
                         Shape = DotNodeShape.DoubleCircle,
                         Label = node.name,
-                        FillColor = Color.Coral,
+                        FillColor = Color.Green,
                         FontColor = Color.Black,
-                        Style = DotNodeStyle.Solid,
+                        Style = DotNodeStyle.Filled,
+                        Width = 0.5f,
+                        Height = 0.5f
+                    };
+                }
+                else if(node.nodeType == NodeType.StartNode)
+                {
+                    graphnode = new DotNode(node.name)
+                    {
+                        Shape = DotNodeShape.Circle,
+                        Label = node.name,
+                        FillColor = Color.LightBlue,
+                        FontColor = Color.Black,
+                        Style = DotNodeStyle.Filled,
                         Width = 0.5f,
                         Height = 0.5f
                     };
