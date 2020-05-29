@@ -83,6 +83,18 @@ namespace FormeleMethode
 
             CreateGraph(DFA_BWB_ABAA_Nodes, "DFABWBABAA");
 
+
+            Console.WriteLine("---- (NDFA) reverse begins with babaa -----");
+
+            NDFA reversedBABAA = DFAReverse.Reverse(BeginsWithBABAA);
+            foreach (string item in strings)
+            {
+                Console.WriteLine(reversedBABAA.Check(item));
+            }
+
+            CreateGraph(reversedBABAA.Nodes, "ReversedBABAA");
+
+
             Console.WriteLine("---- starts with abb or ends with baab -----");
             List<Node> DFA_STARTW_ABB_OR_ENDSW_BAAB_Nodes = new List<Node>()
             {

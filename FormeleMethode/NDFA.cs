@@ -7,10 +7,16 @@ namespace FormeleMethode
     class NDFA
     {
         public List<Node> startNodes;
+        public List<Node> Nodes;
 
         public NDFA(List<Node> startNodes)
         {
             this.startNodes = startNodes;
+        }
+
+        public NDFA(List<Node> startNodes, List<Node> nodes) : this(startNodes)
+        {
+            Nodes = nodes;
         }
 
         private bool check(Node node, int i, string s)
