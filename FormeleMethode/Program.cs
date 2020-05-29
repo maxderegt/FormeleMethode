@@ -22,8 +22,8 @@ namespace FormeleMethode
 
         public Program()
         {
-            List<string> strings = GenerateStrings.GenerateString(5, "abc");
-            /*
+            List<string> strings = GenerateStrings.GenerateString(6, "abc");
+            
             Console.WriteLine("---------- DFA -------------");
             Console.WriteLine("---- begins with babaa -----");
             List<Node> DFA_BWB_ABAA_Nodes = new List<Node>()
@@ -239,7 +239,7 @@ namespace FormeleMethode
                 Console.WriteLine(NDFAregularexpression.Check(item));
             }
             CreateGraph(regularexpressionexample, "regularexpressionexample");
-            */
+            
 
             Console.WriteLine("");
 
@@ -250,7 +250,7 @@ namespace FormeleMethode
             Console.WriteLine("REGEX: " + reg.ToString());
 
             List<Node> ndfa = Thompson.CreateAutomaat(reg);
-            NDFA NDFAregularexpression = new NDFA(new List<Node>() { ndfa[0] });
+            NDFA NDFAregularexpression2 = new NDFA(new List<Node>() { ndfa[0] });
 
             foreach (string item in strings)
             {
