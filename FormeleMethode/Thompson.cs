@@ -63,6 +63,7 @@ namespace FormeleMethode
             stateCounter = newState;
 
             automaat.Add(new Node("q" + newState, NodeType.NormalNode));
+            automaat[newState].AddConnections(new List<Connection>());
 
             ModifyAutomaat(reg.left, ref automaat, ref stateCounter, leftState, newState);
             ModifyAutomaat(reg.right, ref automaat, ref stateCounter, newState, rightState);
@@ -73,16 +74,15 @@ namespace FormeleMethode
             var newLeftState = stateCounter + 1;
             var newRightState = newLeftState + 1;
             stateCounter = newRightState;
+
             automaat.Add(new Node("q" + newLeftState, NodeType.NormalNode));
             automaat.Add(new Node("q" + newRightState, NodeType.NormalNode));
-            automaat[leftState].AddConnections(new List<Connection>()
-            {
-                new Connection('ϵ', automaat[newLeftState])
-            });
-            automaat[newRightState].AddConnections(new List<Connection>()
-            {
-                new Connection('ϵ', automaat[rightState])
-            });
+            automaat[newLeftState].AddConnections(new List<Connection>());
+            automaat[newRightState].AddConnections(new List<Connection>());
+
+            automaat[leftState].AddConnection(new Connection('ϵ', automaat[newLeftState]));
+            automaat[newRightState].AddConnection(new Connection('ϵ', automaat[rightState]));
+
             ModifyAutomaat(reg.left, ref automaat, ref stateCounter, newLeftState, newRightState);
 
             newLeftState = stateCounter + 1;
@@ -90,14 +90,10 @@ namespace FormeleMethode
             stateCounter = newRightState;
             automaat.Add(new Node("q" + newLeftState, NodeType.NormalNode));
             automaat.Add(new Node("q" + newRightState, NodeType.NormalNode));
-            automaat[leftState].AddConnections(new List<Connection>()
-            {
-                new Connection('ϵ', automaat[newLeftState])
-            });
-            automaat[newRightState].AddConnections(new List<Connection>()
-            {
-                new Connection('ϵ', automaat[rightState])
-            });
+            automaat[newLeftState].AddConnections(new List<Connection>());
+            automaat[newRightState].AddConnections(new List<Connection>());
+            automaat[leftState].AddConnection(new Connection('ϵ', automaat[newLeftState]));
+            automaat[newRightState].AddConnection(new Connection('ϵ', automaat[rightState]));
             ModifyAutomaat(reg.right, ref automaat, ref stateCounter, newLeftState, newRightState);
         }
         public static void Regel5(RegExp reg, ref List<Node> automaat, ref int stateCounter, int leftState, int rightState)
@@ -107,17 +103,13 @@ namespace FormeleMethode
             stateCounter = newRightState;
 
             automaat.Add(new Node("q" + newLeftState, NodeType.NormalNode));
-            automaat.Add(new Node("q" + newRightState, NodeType.NormalNode)); 
+            automaat.Add(new Node("q" + newRightState, NodeType.NormalNode));
+            automaat[newLeftState].AddConnections(new List<Connection>());
+            automaat[newRightState].AddConnections(new List<Connection>());
 
-            automaat[leftState].AddConnections(new List<Connection>()
-            {
-                new Connection('ϵ', automaat[newLeftState])
-            });
-            automaat[newRightState].AddConnections(new List<Connection>()
-            {
-                new Connection('ϵ', automaat[rightState]),
-                new Connection('ϵ', automaat[newLeftState])
-            });
+            automaat[leftState].AddConnection(new Connection('ϵ', automaat[newLeftState]));
+            automaat[newRightState].AddConnection(new Connection('ϵ', automaat[rightState]));
+            automaat[newRightState].AddConnection(new Connection('ϵ', automaat[newLeftState]));
 
             ModifyAutomaat(reg.left, ref automaat, ref stateCounter, newLeftState, newRightState);
         }
@@ -129,17 +121,13 @@ namespace FormeleMethode
 
             automaat.Add(new Node("q" + newLeftState, NodeType.NormalNode));
             automaat.Add(new Node("q" + newRightState, NodeType.NormalNode));
+            automaat[newLeftState].AddConnections(new List<Connection>());
+            automaat[newRightState].AddConnections(new List<Connection>());
 
-            automaat[leftState].AddConnections(new List<Connection>()
-            {
-                new Connection('ϵ', automaat[rightState]),
-                new Connection('ϵ', automaat[newLeftState])
-            });
-            automaat[newRightState].AddConnections(new List<Connection>()
-            {
-                new Connection('ϵ', automaat[rightState]),
-                new Connection('ϵ', automaat[newLeftState])
-            });
+            automaat[leftState].AddConnection(new Connection('ϵ', automaat[rightState]));
+            automaat[leftState].AddConnection(new Connection('ϵ', automaat[newLeftState]));
+            automaat[newRightState].AddConnection(new Connection('ϵ', automaat[rightState]));
+            automaat[newRightState].AddConnection(new Connection('ϵ', automaat[newLeftState]));
 
             ModifyAutomaat(reg.left, ref automaat, ref c, newLeftState, newRightState);
         }

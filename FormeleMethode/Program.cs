@@ -234,15 +234,15 @@ namespace FormeleMethode
             Console.WriteLine("---------- Regular expression tester with Regex and Thompson ------------");
             Console.WriteLine("----------                        (a|bc)*                    -----------");
             RegexTester regexTester = new RegexTester(@"(a|bc)*");
-            RegExp reg = new RegExp("a").or(new RegExp("b"));
+            RegExp reg = new RegExp("a").or(new RegExp("b").dot(new RegExp("c"))).star();
             Console.WriteLine("REGEX: " + reg.ToString());
 
             List<Node> ndfa = Thompson.CreateAutomaat(reg);
-            NDFA NDFAregularexpression = new NDFA(new List<Node>() { ndfa[0] });
+            NDFA NDFAregularexpression2 = new NDFA(new List<Node>() { ndfa[0] });
 
             foreach (string item in strings)
             {
-                Console.WriteLine(NDFAregularexpression.Check(item));
+                Console.WriteLine(NDFAregularexpression2.Check(item));
             }
 
 

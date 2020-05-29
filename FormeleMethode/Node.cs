@@ -20,5 +20,10 @@ namespace FormeleMethode
         {
             this.connections = connections;
         }
+
+        public void AddConnection(Connection connection)
+        {
+            this.connections.Add(connection);
+        }
     }
 }
