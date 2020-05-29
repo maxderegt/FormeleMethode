@@ -22,7 +22,7 @@ namespace FormeleMethode
 
         public Program()
         {
-            List<string> strings = GenerateStrings.GenerateString(6, "abc");
+            List<string> strings = GenerateStrings.GenerateString(5, "abc");
             
             Console.WriteLine("---------- DFA -------------");
             Console.WriteLine("---- begins with babaa -----");
@@ -255,6 +255,7 @@ namespace FormeleMethode
             foreach (string item in strings)
             {
                 Console.WriteLine(NDFAregularexpression2.Check(item));
+                Console.WriteLine("Regex test: " + regexTester.Check(item));
             }
 
 
