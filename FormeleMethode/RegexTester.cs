@@ -5,11 +5,11 @@ using System.Text.RegularExpressions;
 
 namespace FormeleMethode
 {
-    class Regex
+    class RegexTester
     {
         System.Text.RegularExpressions.Regex rg;
 
-        public Regex(string pattern)
+        public RegexTester(string pattern)
         {
             rg = new System.Text.RegularExpressions.Regex(pattern);
         }

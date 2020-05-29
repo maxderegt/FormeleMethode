@@ -4,7 +4,7 @@ using System.Text;
 
 namespace FormeleMethode
 {
-    class Connection
+    public class Connection
     {
         public char letter;
         public Node node;
