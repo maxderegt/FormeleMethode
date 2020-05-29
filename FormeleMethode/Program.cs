@@ -7,11 +7,14 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Text;
 
 namespace FormeleMethode
 {
     class Program
     {
+        StringBuilder batfile = new StringBuilder();
+
         static void Main(string[] args)
         {
             Program program = new Program();
@@ -19,6 +22,9 @@ namespace FormeleMethode
 
         public Program()
         {
+           
+
+
             List<string> strings = GenerateStrings.GenerateString(5, "abc");
 
             Console.WriteLine("---------- DFA -------------");
@@ -232,14 +238,16 @@ namespace FormeleMethode
             Console.WriteLine("----------      (a|bc)*       -----------");
             Regex regex = new Regex(@"(a|bc)*");
 
-
+            
             foreach (string item in strings)
             {
                 Console.WriteLine(regex.Check(item));
             }
 
-            Console.ReadLine();
+            File.WriteAllText("pdf.bat", batfile.ToString());
+            System.Diagnostics.Process.Start("pdf.bat");
 
+            Console.ReadLine();
         }
 
         public void CreateGraph(List<Node> nodes, string name)
@@ -303,6 +311,7 @@ namespace FormeleMethode
             var dot = graph.Compile();
             dot = dot.Insert(10 + name.Length, "rankdir=\"LR\";");
             File.WriteAllText(name + ".dot", dot);
+            batfile.AppendLine($"dot -T pdf {name}.dot -O");
         }
     }
 }
