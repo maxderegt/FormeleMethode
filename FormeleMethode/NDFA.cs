@@ -7,10 +7,16 @@ namespace FormeleMethode
     class NDFA
     {
         public List<Node> startNodes;
+        public List<Node> Nodes;
 
         public NDFA(List<Node> startNodes)
         {
             this.startNodes = startNodes;
+        }
+
+        public NDFA(List<Node> startNodes, List<Node> nodes) : this(startNodes)
+        {
+            Nodes = nodes;
         }
 
         private bool check(Node node, int i, string s)
@@ -54,8 +60,9 @@ namespace FormeleMethode
             bool EpsilonAsEndNode = false;
             foreach (Connection connection1 in node.connections)
             {
-                if (connection1.node.nodeType == NodeType.EndNode)
-                    EpsilonAsEndNode = true;
+                if(connection1.letter.Equals('ϵ'))
+                    if (connection1.node.nodeType == NodeType.EndNode)
+                        EpsilonAsEndNode = true;
             }
             bool returnvalue = (node.nodeType == NodeType.EndNode || Endnode || EpsilonAsEndNode);
             return returnvalue;
@@ -84,6 +91,10 @@ namespace FormeleMethode
 
         public string Check(string s)
         {
+            if (s.Equals("aaaba"))
+            {
+                int i = 0;
+            }
             bool Endnode = false;
             foreach (var node in startNodes)
             {
