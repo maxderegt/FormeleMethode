@@ -6,7 +6,7 @@ namespace FormeleMethode
 {
     public class Node
     {
-        public List<Connection> connections;
+        public List<Connection> connections = new List<Connection>();
         public string name;
         public NodeType nodeType;
 

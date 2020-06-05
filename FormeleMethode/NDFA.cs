@@ -9,14 +9,9 @@ namespace FormeleMethode
         public List<Node> startNodes;
         public List<Node> Nodes;
 
-        public NDFA(List<Node> startNodes)
-        {
-            this.startNodes = startNodes;
-        }
-
-        public NDFA(List<Node> startNodes, List<Node> nodes) : this(startNodes)
-        {
+        public NDFA(List<Node> startNodes, List<Node> nodes) { 
             Nodes = nodes;
+            this.startNodes = startNodes;
         }
 
         private bool check(Node node, int i, string s)
@@ -103,10 +98,6 @@ namespace FormeleMethode
 
         public string Check(string s)
         {
-            if (s.Equals("aaaba"))
-            {
-                int i = 0;
-            }
             bool Endnode = false;
             foreach (var node in startNodes)
             {

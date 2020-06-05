@@ -193,7 +193,7 @@ namespace FormeleMethode
                 new Connection('a', NDFA_C_AAoBB_Nodes[3])
             });
 
-            NDFA ContainsAAorBB = new NDFA(new List<Node>() { NDFA_C_AAoBB_Nodes[0] });
+            NDFA ContainsAAorBB = new NDFA(new List<Node>() { NDFA_C_AAoBB_Nodes[0] }, NDFA_C_AAoBB_Nodes);
             foreach (string item in strings)
             {
                 Console.WriteLine(ContainsAAorBB.Check(item));
@@ -201,6 +201,53 @@ namespace FormeleMethode
 
 
             CreateGraph(NDFA_C_AAoBB_Nodes, "NDFACAAoBB");
+
+
+            Console.WriteLine("---- test NDFA to DFA -----");
+            Console.WriteLine("---------- NDFA -----------");
+            List<Node> NDFATODFA = new List<Node>()
+            {
+                new Node("q0", NodeType.StartNode),
+                new Node("q1", NodeType.EndNode),
+                new Node("q2", NodeType.EndNode),
+                new Node("q3", NodeType.NormalNode),
+                new Node("q4", NodeType.NormalNode)
+            };
+            NDFATODFA[0].AddConnections(new List<Connection>()
+            {
+                new Connection('b', NDFATODFA[1]),
+                new Connection('a', NDFATODFA[1]),
+                new Connection('b', NDFATODFA[2]),
+            });
+            NDFATODFA[1].AddConnections(new List<Connection>()
+            {
+                new Connection('a', NDFATODFA[2]),
+                new Connection('ϵ', NDFATODFA[3]),
+                new Connection('b', NDFATODFA[3])
+            });
+            NDFATODFA[2].AddConnections(new List<Connection>()
+            {
+                new Connection('a', NDFATODFA[1])
+            });
+            NDFATODFA[3].AddConnections(new List<Connection>()
+            {
+                new Connection('a', NDFATODFA[4]),
+                new Connection('a', NDFATODFA[1])
+            });
+            NDFATODFA[4].AddConnections(new List<Connection>()
+            {
+                new Connection('b', NDFATODFA[4]),
+                new Connection('ϵ', NDFATODFA[2])
+            });
+
+            NDFA TESTNDFATODFA = new NDFA(new List<Node>(){NDFATODFA[0]}, NDFATODFA);
+
+            CreateGraph(TESTNDFATODFA.Nodes, "test_NDFA_NDFAtoDFA");
+
+            Console.WriteLine("----------- DFA -----------");
+            DFA TESTDFA = NDFAtoDFA.ToDFA(TESTNDFATODFA);
+            CreateGraph(TESTDFA.Nodes, "test_DFA_NDFAtoDFA");
+
 
             Console.WriteLine("---- regularexpressionexample -----");
 
@@ -237,7 +284,7 @@ namespace FormeleMethode
             });
             regularexpressionexample[4].AddConnections(new List<Connection>());
 
-            NDFA NDFAregularexpression = new NDFA(new List<Node>() { regularexpressionexample[0] });
+            NDFA NDFAregularexpression = new NDFA(new List<Node>() { regularexpressionexample[0] }, regularexpressionexample);
             foreach (string item in strings)
             {
                 Console.WriteLine(NDFAregularexpression.Check(item));
@@ -251,7 +298,7 @@ namespace FormeleMethode
             Console.WriteLine("REGEX: " + reg.ToString());
 
             List<Node> ndfa = Thompson.CreateAutomaat(reg);
-            NDFA NDFAregularexpression2 = new NDFA(new List<Node>() { ndfa[0] });
+            NDFA NDFAregularexpression2 = new NDFA(new List<Node>() { ndfa[0] }, ndfa);
 
             foreach (string item in strings)
             {
@@ -324,7 +371,14 @@ namespace FormeleMethode
                 foreach (var item in node.connections)
                 {
                     string nodename = item.node.name;
-                    int number = int.Parse(nodename.Substring(nodename.Length - 1));
+                    int number = 0;
+                    for (int i2 = 0; i2 < dotNodes.Count; i2++)
+                    {
+                        if (dotNodes[i2].Label.Text.Equals(nodename))
+                        {
+                            number = i2;
+                        }
+                    }
 
                     var myEdge = new DotEdge(dotNodes[i], dotNodes[number])
                     {

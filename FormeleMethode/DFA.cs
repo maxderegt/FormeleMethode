@@ -7,10 +7,16 @@ namespace FormeleMethode
     class DFA
     {
         public Node startNode;
+        public List<Node> Nodes;
 
         public DFA(Node startNode)
         {
             this.startNode = startNode;
+        }
+
+        public DFA(Node startNode, List<Node> nodes) : this(startNode)
+        {
+            Nodes = nodes;
         }
 
         public string Check(string s)
