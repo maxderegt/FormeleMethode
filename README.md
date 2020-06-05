@@ -3,11 +3,14 @@
 wat we missen:
 - NDFA naar DFA
 - DFA minimaliseren
+  - Brzozowski's algorithm
+  - Hopcroft's algorithm
 - DFA operaties
   - en
   - of
-  - bevat
+  - niet
 - DFA genereer stukjes
   - Begint met
   - bevat
   -eindigt met
+
