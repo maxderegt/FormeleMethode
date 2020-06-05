@@ -7,6 +7,7 @@ namespace FormeleMethode
 {
     public class Thompson
     {
+        //creeër een automaat volgens de gegeven regex
         public static List<Node> CreateAutomaat(RegExp reg)
         {
             List<Node> automaat = new List<Node>()
@@ -24,6 +25,7 @@ namespace FormeleMethode
             return automaat;
         }
 
+        //handelt de verschillende operatoren (+*|. en ONE) af en stuurt alles door naar de juiste regel om te worden afgehandeld.
         private static void ModifyAutomaat(RegExp reg, ref List<Node> automaat, ref int stateCounter, int leftState, int rightState)
         {
             switch (reg._operator)
@@ -48,6 +50,7 @@ namespace FormeleMethode
             }
         }
 
+        //de vertaling van 1 terminaal symbool en een lege productie (one) (regel 1 en 2)
         public static void Regel1En2(RegExp reg, ref List<Node> automaat, ref int stateCounter, int leftState, int rightState)
         {
             char symbol = reg.terminals.First();
@@ -57,6 +60,8 @@ namespace FormeleMethode
                 new Connection(symbol, automaat[rightState])
             });
         }
+
+        //de vertaling van de concatenatie (dot) (regel 3)
         public static void Regel3(RegExp reg, ref List<Node> automaat, ref int stateCounter, int leftState, int rightState)
         {
             var newState = stateCounter + 1;
@@ -69,6 +74,7 @@ namespace FormeleMethode
             ModifyAutomaat(reg.right, ref automaat, ref stateCounter, newState, rightState);
         }
 
+        //de vertaling van keuze operator (or) (regel 4)
         public static void Regel4(RegExp reg, ref List<Node> automaat, ref int stateCounter, int leftState, int rightState)
         {
             var newLeftState = stateCounter + 1;
@@ -96,6 +102,8 @@ namespace FormeleMethode
             automaat[newRightState].AddConnection(new Connection('ϵ', automaat[rightState]));
             ModifyAutomaat(reg.right, ref automaat, ref stateCounter, newLeftState, newRightState);
         }
+
+        //de vertaling van plus operator (+) (regel 5)
         public static void Regel5(RegExp reg, ref List<Node> automaat, ref int stateCounter, int leftState, int rightState)
         {
             var newLeftState = stateCounter + 1;
@@ -113,6 +121,8 @@ namespace FormeleMethode
 
             ModifyAutomaat(reg.left, ref automaat, ref stateCounter, newLeftState, newRightState);
         }
+
+        //de vertaling van star operator (*) (regel 6)
         public static void Regel6(RegExp reg, ref List<Node> automaat, ref int c, int leftState, int rightState)
         {
             var newLeftState = c + 1;

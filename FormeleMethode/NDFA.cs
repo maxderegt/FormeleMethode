@@ -108,5 +108,54 @@ namespace FormeleMethode
 
             return new string($"String {s} is {Endnode}");
         }
+
+        private bool CheckBool(string s)
+        {
+            if (s.Equals("aaaba"))
+            {
+                int i = 0;
+            }
+            bool Endnode = false;
+            foreach (var node in startNodes)
+            {
+                Endnode = Endnode || check(node, 0, s);
+                if (Endnode)
+                    break;
+            }
+
+            return Endnode;
+        }
+
+        public List<String> geefTaalTotN(int n, string alphabet)
+        {
+            List<String> acceptedWords = new List<string>();
+            List<string> strings = GenerateStrings.GenerateString(n, alphabet);
+
+            foreach (string item in strings)
+            {
+                if (CheckBool(item))
+                {
+                    acceptedWords.Add(item);
+                }
+            }
+
+            return acceptedWords;
+        }
+
+        public List<String> geefFoutieveTaalTotN(int n, string alphabet)
+        {
+            List<String> nonAcceptedWords = new List<string>();
+            List<string> strings = GenerateStrings.GenerateString(n, alphabet);
+
+            foreach (string item in strings)
+            {
+                if (!CheckBool(item))
+                {
+                    nonAcceptedWords.Add(item);
+                }
+            }
+
+            return nonAcceptedWords;
+        }
     }
 }

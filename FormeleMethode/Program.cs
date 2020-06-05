@@ -24,6 +24,7 @@ namespace FormeleMethode
         {
             List<string> strings = GenerateStrings.GenerateString(5, "ab");
             
+
             Console.WriteLine("---------- DFA -------------");
             Console.WriteLine("---- begins with babaa -----");
             List<Node> DFA_BWB_ABAA_Nodes = new List<Node>()
@@ -73,12 +74,36 @@ namespace FormeleMethode
             });
 
             DFA BeginsWithBABAA = new DFA(DFA_BWB_ABAA_Nodes[0]);
+            
+            List<Node> BeginsWithBABAANodes = GenerateDFA.GenerateDFABeginsWith("babaa", "ab");
+            BeginsWithBABAA = new DFA(BeginsWithBABAANodes[2]);
             foreach (string item in strings)
             {
                 Console.WriteLine(BeginsWithBABAA.Check(item));
             }
 
-            CreateGraph(DFA_BWB_ABAA_Nodes, "DFABWBABAA");
+            List<String> correctWords = BeginsWithBABAA.geefTaalTotN(5, "ab");
+            Console.WriteLine("-----------------");
+            Console.WriteLine("Correct words BeginsWithBABAA");
+            foreach (String s in correctWords)
+            {
+                Console.WriteLine(s);
+            }
+            
+            List<String> inCorrectWords = BeginsWithBABAA.geefFoutieveTaalTotN(5, "ab");
+            Console.WriteLine("-----------------");
+            Console.WriteLine("incorrect words BeginsWithBABAA");
+            foreach (String s in inCorrectWords)
+            {
+                Console.WriteLine(s);
+            }
+
+            CreateGraph(BeginsWithBABAANodes, "DFABWBABAA");
+            List<Node> EndsWithBABAANodes = GenerateDFA.GenerateDFAEndsWith("babaa", "ab");
+            CreateGraph(EndsWithBABAANodes, "DFAEWBABAA");
+
+            List<Node> ContainsBABAANodes = GenerateDFA.GenerateDFAContains("babaa", "ab");
+            CreateGraph(ContainsBABAANodes, "DFACBABAA");
 
 
             Console.WriteLine("---- (NDFA) reverse begins with babaa -----");
@@ -199,6 +224,22 @@ namespace FormeleMethode
                 Console.WriteLine(ContainsAAorBB.Check(item));
             }
 
+            correctWords = ContainsAAorBB.geefTaalTotN(5, "ab");
+            Console.WriteLine("-----------------");
+            Console.WriteLine("Correct words ContainsAAorBB");
+            foreach (String s in correctWords)
+            {
+                Console.WriteLine(s);
+            }
+
+            inCorrectWords = ContainsAAorBB.geefFoutieveTaalTotN(5, "ab");
+            Console.WriteLine("-----------------");
+            Console.WriteLine("incorrect words ContainsAAorBB");
+            foreach (String s in inCorrectWords)
+            {
+                Console.WriteLine(s);
+            }
+
 
             CreateGraph(NDFA_C_AAoBB_Nodes, "NDFACAAoBB");
 
@@ -294,6 +335,24 @@ namespace FormeleMethode
             Console.WriteLine("---------- Regular expression tester with Regex and Thompson ------------");
             Console.WriteLine("----------                        (a|bc)*                    -----------");
             RegexTester regexTester = new RegexTester(@"(a|bc)*");
+            
+            correctWords = regexTester.geefTaalTotN(5, "abc");
+            Console.WriteLine("-----------------");
+            Console.WriteLine("Correct words (a|bc)*");
+            foreach (String s in correctWords)
+            {
+                Console.WriteLine(s);
+            }
+
+            inCorrectWords = regexTester.geefFoutieveTaalTotN(5, "abc");
+            Console.WriteLine("-----------------");
+            Console.WriteLine("incorrect words (a|bc)*");
+            foreach (String s in inCorrectWords)
+            {
+                Console.WriteLine(s);
+            }
+
+
             RegExp reg = new RegExp("a").or(new RegExp("b").dot(new RegExp("c"))).star();
             Console.WriteLine("REGEX: " + reg.ToString());
 
@@ -306,6 +365,14 @@ namespace FormeleMethode
                 //Console.WriteLine("Regex test: " + regexTester.Check(item));
             }
 
+            Console.WriteLine("---------- Regular expression parser ------------");
+            Console.WriteLine("----------  input String: (a|bc)*                    -----------");
+
+            RegExp reg2 = RegexParser.parse("(a|bc)*");
+            Console.WriteLine("----------  result String: " + reg2.ToString() + "                    -----------");
+
+            List<Node> ndfa2 = Thompson.CreateAutomaat(reg2);
+            CreateGraph(ndfa2, "RegExParser");
 
             CreateGraph(ndfa, "RegExb");
 
@@ -388,6 +455,8 @@ namespace FormeleMethode
                         FontColor = Color.Black,
                         Label = item.letter.ToString()
                     };
+
+
 
                     graph.Elements.Add(myEdge);
                 }
