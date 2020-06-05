@@ -1,16 +1,14 @@
 # FormeleMethode
 
 wat we missen:
-- NDFA naar DFA
-- DFA minimaliseren
-  - Brzozowski's algorithm
-  - Hopcroft's algorithm
-- DFA operaties
-  - en
-  - of
-  - niet
-- DFA genereer stukjes
-  - Begint met
-  - bevat
-  -eindigt met
+2a. 
+Woorden genereren aan de hand van de ingevoerde reguliere expressie 
+Woorden genereren die niet in de taal zitten
 
+6. 
+Minimalisatie (via reverse)
+
+3a
+begint met xyz
+eindigt op xyz
+bevat xyz
