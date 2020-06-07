@@ -18,6 +18,24 @@ namespace FormeleMethode
         {
             Nodes = nodes;
         }
+        public bool Check(string s, bool tf)
+        {
+            char[] chararr = s.ToCharArray();
+            Node CurrentNode = startNode;
+            foreach (char character in chararr)
+            {
+                foreach (Connection connection in CurrentNode.connections)
+                {
+                    if (connection.letter.Equals(character))
+                    {
+                        CurrentNode = connection.node;
+                        break;
+                    }
+                }
+            }
+
+            return CurrentNode.nodeType == NodeType.EndNode;
+        }
 
         public string Check(string s)
         {

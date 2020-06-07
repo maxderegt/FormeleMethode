@@ -73,8 +73,29 @@ namespace FormeleMethode
                 new Connection('a', DFA_BWB_ABAA_Nodes[6])
             });
 
-            DFA BeginsWithBABAA = new DFA(DFA_BWB_ABAA_Nodes[0]);
-            
+            DFA BeginsWithBABAA = new DFA(DFA_BWB_ABAA_Nodes[0], DFA_BWB_ABAA_Nodes);
+
+            CreateGraph(DFA_BWB_ABAA_Nodes, "DFABWBABAA");
+
+            Console.WriteLine("---- (NDFA) reverse begins with babaa -----");
+
+            NDFA reversedBABAA = DFAReverse.Reverse2(BeginsWithBABAA);
+            foreach (string item in strings)
+            {
+                Console.WriteLine(reversedBABAA.Check(item));
+            }
+
+            CreateGraph(reversedBABAA.Nodes, "ReversedBABAA");
+
+            NDFA reverseone = DFAReverse.Reverse2(BeginsWithBABAA);
+            CreateGraph(reverseone.Nodes, "1");
+            DFA optimisedone = NDFAtoDFA.ToDFA2(reverseone);
+            CreateGraph(optimisedone.Nodes, "2");
+            NDFA reversetwo = DFAReverse.Reverse2(optimisedone);
+            CreateGraph(reversetwo.Nodes, "3");
+            DFA optimisetwo = NDFAtoDFA.ToDFA2(reversetwo);
+            CreateGraph(optimisetwo.Nodes, "4");
+
             List<Node> BeginsWithBABAANodes = GenerateDFA.GenerateDFABeginsWith("babaa", "ab");
             BeginsWithBABAA = new DFA(BeginsWithBABAANodes[2]);
             foreach (string item in strings)
@@ -98,23 +119,25 @@ namespace FormeleMethode
                 Console.WriteLine(s);
             }
 
-            CreateGraph(BeginsWithBABAANodes, "DFABWBABAA");
+            CreateGraph(BeginsWithBABAANodes, "GEN_DFABWBABAA");
             List<Node> EndsWithBABAANodes = GenerateDFA.GenerateDFAEndsWith("babaa", "ab");
-            CreateGraph(EndsWithBABAANodes, "DFAEWBABAA");
+            CreateGraph(EndsWithBABAANodes, "GEN_DFAEWBABAA");
 
             List<Node> ContainsBABAANodes = GenerateDFA.GenerateDFAContains("babaa", "ab");
-            CreateGraph(ContainsBABAANodes, "DFACBABAA");
+            CreateGraph(ContainsBABAANodes, "GEN_DFACBABAA");
 
+            DFA generatedcontains = null;
 
-            Console.WriteLine("---- (NDFA) reverse begins with babaa -----");
-
-            NDFA reversedBABAA = DFAReverse.Reverse(BeginsWithBABAA);
-            foreach (string item in strings)
+            foreach (var item in ContainsBABAANodes)
             {
-                Console.WriteLine(reversedBABAA.Check(item));
+                if (item.nodeType == NodeType.StartNode)
+                    generatedcontains = new DFA(item, ContainsBABAANodes);
             }
 
-            CreateGraph(reversedBABAA.Nodes, "ReversedBABAA");
+
+
+
+           
 
 
             Console.WriteLine("---- starts with abb or ends with baab -----");
@@ -177,14 +200,13 @@ namespace FormeleMethode
                 new Connection('b', DFA_STARTW_ABB_OR_ENDSW_BAAB_Nodes[5])
             });
 
-            DFA StartsWithABBorEndsWithBAAB = new DFA(DFA_STARTW_ABB_OR_ENDSW_BAAB_Nodes[0]);
+            DFA StartsWithABBorEndsWithBAAB = new DFA(DFA_STARTW_ABB_OR_ENDSW_BAAB_Nodes[0], DFA_STARTW_ABB_OR_ENDSW_BAAB_Nodes);
             foreach (string item in strings)
             {
                 Console.WriteLine(StartsWithABBorEndsWithBAAB.Check(item));
             }
 
             CreateGraph(DFA_STARTW_ABB_OR_ENDSW_BAAB_Nodes, "DFASTARTWABBORENDSWBAAB");
-
             Console.WriteLine("---------- NDFA ------------");
             Console.WriteLine("---- Contains aa or bb -----");
             List<Node> NDFA_C_AAoBB_Nodes = new List<Node>()
@@ -248,11 +270,11 @@ namespace FormeleMethode
             Console.WriteLine("---------- NDFA -----------");
             List<Node> NDFATODFA = new List<Node>()
             {
-                new Node("q0", NodeType.StartNode),
-                new Node("q1", NodeType.EndNode),
+                new Node("q1", NodeType.StartNode),
                 new Node("q2", NodeType.EndNode),
-                new Node("q3", NodeType.NormalNode),
-                new Node("q4", NodeType.NormalNode)
+                new Node("q3", NodeType.EndNode),
+                new Node("q4", NodeType.NormalNode),
+                new Node("q5", NodeType.NormalNode)
             };
             NDFATODFA[0].AddConnections(new List<Connection>()
             {
@@ -285,10 +307,28 @@ namespace FormeleMethode
 
             CreateGraph(TESTNDFATODFA.Nodes, "test_NDFA_NDFAtoDFA");
 
+            foreach (string item in strings)
+            {
+                Console.WriteLine(TESTNDFATODFA.Check(item));
+            }
+
             Console.WriteLine("----------- DFA -----------");
-            DFA TESTDFA = NDFAtoDFA.ToDFA(TESTNDFATODFA);
+            DFA TESTDFA = NDFAtoDFA.ToDFA2(TESTNDFATODFA);
             CreateGraph(TESTDFA.Nodes, "test_DFA_NDFAtoDFA");
 
+            foreach (string item in strings)
+            {
+                Console.WriteLine(TESTDFA.Check(item));
+            }
+
+            Console.WriteLine("----------- optimized DFA -----------");
+
+            DFA optimezedfa = NDFAtoDFA.ToDFA2(DFAReverse.Reverse2(NDFAtoDFA.ToDFA2(DFAReverse.Reverse2(TESTDFA))));
+            CreateGraph(optimezedfa.Nodes, "test_Optimized_DFA_NDFAtoDFA");
+            foreach (string item in strings)
+            {
+                Console.WriteLine(optimezedfa.Check(item));
+            }
 
             Console.WriteLine("---- regularexpressionexample -----");
 
@@ -466,6 +506,7 @@ namespace FormeleMethode
             dot = dot.Insert(10 + name.Length, "rankdir=\"LR\";");
             File.WriteAllText(name + ".dot", dot);
             batfile.AppendLine($"dot -T pdf {name}.dot -O");
+            batfile.AppendLine($"start {name}.dot.pdf -O");
         }
     }
 }

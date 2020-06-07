@@ -28,6 +28,10 @@ namespace FormeleMethode
                     else 
                         return false;
                 }
+                if (node.name.Equals("q3") && i == 3 & s.Equals("aabab"))
+                {
+                    int wejfi = 0;
+                }
 
                 foreach (Connection connection in node.connections)
                 {
@@ -107,6 +111,17 @@ namespace FormeleMethode
             }
 
             return new string($"String {s} is {Endnode}");
+        }
+        public bool Check(string s, bool tf)
+        {
+            bool Endnode = false;
+            foreach (var node in startNodes)
+            {
+                Endnode = Endnode || check(node, 0, s);
+                if (Endnode)
+                    break;
+            }
+            return Endnode;
         }
 
         private bool CheckBool(string s)

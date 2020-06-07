@@ -10,8 +10,8 @@ namespace FormeleMethode
     {
         public int Compare(Node x, Node y)
         {
-            int ix = int.Parse(x.name.Substring(x.name.Length - 1));
-            int iy = int.Parse(y.name.Substring(x.name.Length - 1));
+            int ix = int.Parse(x.name.Substring(1));
+            int iy = int.Parse(y.name.Substring(1));
             if (ix == 0 || iy == 0)
             {
                 return 0;
@@ -24,15 +24,60 @@ namespace FormeleMethode
     }
     class DFAReverse
     {
-        private static List<Node> nodes = new List<Node>();
+        public static NDFA Reverse2(DFA orignal)
+        {
+            List<Node> nodes = new List<Node>();
+            List<Node> startnodes = new List<Node>();
+            foreach (Node item in orignal.Nodes)
+            {
+                NodeType type = NodeType.NormalNode;
+                if (item.nodeType == NodeType.StartNode)
+                    type = NodeType.EndNode;
+                else if (item.nodeType == NodeType.EndNode)
+                    type = NodeType.StartNode;
+                Node newnode = new Node(item.name, type);
+                nodes.Add(newnode);
+
+                if (newnode.nodeType == NodeType.StartNode)
+                    startnodes.Add(newnode);
+            }
+
+            foreach (Node node in orignal.Nodes)
+            {
+                foreach (Connection connection in node.connections)
+                {
+                    foreach (Node newnode in nodes)
+                    {
+                        if (newnode.name.Equals(connection.node.name))
+                        {
+                            foreach (Node fromnode in nodes)
+                            {
+                                if (fromnode.name.Equals(node.name))
+                                {
+                                    newnode.AddConnection(new Connection(connection.letter, fromnode));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            NDFA ndfa = new NDFA(startnodes, nodes);
+            return ndfa;
+        }
+
+
         public static NDFA Reverse(DFA orignal)
         {
+            List<Node> nodes;
             List<Node> startnodes = new List<Node>();
-            check(orignal.startNode);
+            nodes = orignal.Nodes;
+            List<Node> newnodes = new List<Node>();
 
-            List<Node> newnodes = nodes.ConvertAll(node => 
-            new Node(node.connections.ConvertAll(connection => new Connection(connection.letter, connection.node)), 
-            node.name, node.nodeType));
+            foreach (Node item in nodes)
+            {
+                Node newnode = new Node(item.name, item.nodeType);
+                newnodes.Add(newnode);
+            }
 
             foreach (Node node in newnodes)
             {
@@ -86,22 +131,6 @@ namespace FormeleMethode
             }
             else
                 return null;
-        }
-
-        private static void check(Node node)
-        {
-            if (!nodes.Contains(node))
-            {
-                nodes.Add(node);
-            }
-            foreach (Connection item in node.connections)
-            {
-                if (!nodes.Contains(item.node))
-                {
-                    nodes.Add(item.node);
-                    check(item.node);
-                }
-            }
         }
     }
 }
