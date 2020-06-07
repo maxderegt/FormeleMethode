@@ -414,17 +414,29 @@ namespace FormeleMethode
             List<Node> ndfa = Thompson.CreateAutomaat(exp);
             NDFA NDFAregularexpression = new NDFA(new List<Node>() { ndfa[0] }, ndfa);
             List<string> regexcorrect = tester.geefTaalTotN(5, answer);
+            List<string> regexincorrect = tester.geefFoutieveTaalTotN(5, answer);
             CreateGraph(NDFAregularexpression.Nodes, "REGEX_NDFA");
 
             DFA DFAregularexpression = NDFAtoDFA.ToDFA2(NDFAregularexpression);
-            List<string> ndfacorrect = NDFAregularexpression.geefTaalTotN(5, answer);
             CreateGraph(DFAregularexpression.Nodes, "REGEX_DFA");
 
             NDFA Reverse = DFAReverse.Reverse2(DFAregularexpression);
-            List<string> dfacorrect = DFAregularexpression.geefTaalTotN(5, answer);
             CreateGraph(Reverse.Nodes, "REGEX_DFA_Reverse");
 
 
+            Console.WriteLine("-------- Correct words Contains --------");
+            foreach (String item in regexcorrect)
+            {
+                Console.WriteLine(item);
+            }
+            Console.WriteLine("-------- incorrect words --------");
+            foreach (String item in regexincorrect)
+            {
+                Console.WriteLine(item);
+            }
+
+
+            Console.WriteLine("-------- regex/ndfa/dfa/ndfa Reversed --------");
             foreach (string item in strings)
             {
                 Console.WriteLine(tester.Check(item));
