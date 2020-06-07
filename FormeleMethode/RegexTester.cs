@@ -19,12 +19,12 @@ namespace FormeleMethode
             bool Endnode = false;
             Match match = rg.Match(s);
             Endnode = match.Value == s? true: false;
-            return new string($"String {s} is {Endnode}");
+            return new string($"Regex {s} is {Endnode}");
         }
 
         private bool CheckBool(string s)
         {
-            bool Endnode = false;
+            //bool Endnode = false;
             Match match = rg.Match(s);
             return match.Value == s ? true : false;
         }

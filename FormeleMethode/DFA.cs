@@ -9,14 +9,10 @@ namespace FormeleMethode
         public Node startNode;
         public List<Node> Nodes;
 
-        public DFA(Node startNode)
-        {
-            this.startNode = startNode;
-        }
-
-        public DFA(Node startNode, List<Node> nodes) : this(startNode)
+        public DFA(Node startNode, List<Node> nodes)
         {
             Nodes = nodes;
+            this.startNode = startNode;
         }
         public bool Check(string s, bool tf)
         {
@@ -53,7 +49,7 @@ namespace FormeleMethode
                 }
             }
 
-           return new string($"String {s} ends at node {CurrentNode.name} and is {CurrentNode.nodeType == NodeType.EndNode}");
+           return new string($"DFA {s} is {CurrentNode.nodeType == NodeType.EndNode}");
         }
 
         private bool CheckBool(string s)

@@ -110,7 +110,7 @@ namespace FormeleMethode
                     break;
             }
 
-            return new string($"String {s} is {Endnode}");
+            return new string($"NDFA {s} is {Endnode}");
         }
         public bool Check(string s, bool tf)
         {

@@ -74,12 +74,17 @@ namespace FormeleMethode
         public static DFA ToDFA2(NDFA ndfa)
         {
             Nodes.Clear();
-            if(Fuik == null)
+            List<Row> myList = GenerateTable(ndfa);
+            if (Fuik == null)
             {
                 Fuik = new Node("q999999999", NodeType.NormalNode);
+                //TODO make connections dynamic
+                foreach (var item in letters)
+                {
+                    Fuik.connections.Add(new Connection(item, Fuik));
+                }
                 Fuik.connections = new List<Connection> { new Connection('a', Fuik), new Connection('b', Fuik) };
             }
-            List<Row> myList = GenerateTable(ndfa);
             CopyNodes(ndfa);
             Filltable(myList, Nodes);
             return ConvertTableToDFA2(myList);
@@ -150,7 +155,7 @@ namespace FormeleMethode
                 }
             }
 
-            foreach (Node node2 in Nodes)
+            foreach (Node node2 in nodes)
             {
                 if(node2.nodeType == NodeType.StartNode)
                 {
@@ -690,7 +695,7 @@ namespace FormeleMethode
                         {
                             if (connection1.letter.Equals('ϵ'))
                             {
-                                List<Node> secondlist = EndOnNodeWithEpsilon(connection1.node);
+                                List<Node> secondlist = EndOnNodeWithEpsilon(connection.node);
                                 foreach (Node epsilonnode in secondlist)
                                 {
                                     row[i].Add(epsilonnode);
@@ -725,7 +730,7 @@ namespace FormeleMethode
             {
                 if (connection.letter.Equals('ϵ'))
                 {
-                    List<Node> morenodes = EndOnNodeWithEpsilon(node);
+                    List<Node> morenodes = EndOnNodeWithEpsilon(connection.node);
                     foreach (Node item in morenodes)
                     {
                         nodes.Add(item);
