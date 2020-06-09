@@ -6,6 +6,7 @@ using System.Text;
 
 namespace FormeleMethode
 {
+    //comparer to compare the node names, used for sorting it from lowest to greatest
     class comparer : IComparer<Node>
     {
         public int Compare(Node x, Node y)
@@ -22,12 +23,16 @@ namespace FormeleMethode
 
         }
     }
+
+    //this class handles the conversion from DFA to NDFA in the form of a reverse
     class DFAReverse
     {
+        //this function handles the conversion from DFA to NDFA in the form of a reverse
         public static NDFA Reverse2(DFA orignal)
         {
             List<Node> nodes = new List<Node>();
             List<Node> startnodes = new List<Node>();
+            //copies the nodes and swap the start/end nodes
             foreach (Node item in orignal.Nodes)
             {
                 NodeType type = NodeType.NormalNode;
@@ -42,6 +47,7 @@ namespace FormeleMethode
                     startnodes.Add(newnode);
             }
 
+            //this reverses the connections from the original nodes
             foreach (Node node in orignal.Nodes)
             {
                 foreach (Connection connection in node.connections)
@@ -61,11 +67,13 @@ namespace FormeleMethode
                     }
                 }
             }
+
+            //the NDFA that is reversed
             NDFA ndfa = new NDFA(startnodes, nodes);
             return ndfa;
         }
 
-
+        //Old Reverse, is deprecated
         public static NDFA Reverse(DFA orignal)
         {
             List<Node> nodes;

@@ -7,9 +7,11 @@ using System.Text;
 
 namespace FormeleMethode
 {
+	//inspired by/modified from
 	//https://algorithms.tutorialhorizon.com/generate-all-strings-of-n-bits/
 
 
+	//this class generates list of strings to specified lenght with specified letters
 	class GenerateStrings
     {
 		static string[] arrA;
@@ -31,6 +33,7 @@ namespace FormeleMethode
 			}
 		}
 
+		//generates list of strings to specified lenght with specified letters
 		public static List<String> GenerateString(int i, string alphabet)
 		{
 			letters = alphabet;
