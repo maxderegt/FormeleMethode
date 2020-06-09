@@ -10,8 +10,17 @@ namespace FormeleMethode
         or,
         dot
     }
+
+    /// <summary>
+    /// A basic parser that rewrites strings into a RegExp object.
+    /// </summary>
     class RegexParser
     {
+        /// <summary>
+        /// A basic parser that rewrites strings into a RegExp object.
+        /// </summary>
+        /// <param name="text">The text to create a RegExp from</param>
+        /// <returns>a RegExp based on the text</returns>
         public static RegExp parse(string text)
         {
             RegExp regex = new RegExp();
@@ -19,8 +28,10 @@ namespace FormeleMethode
             Mode currentMode = 0;
             List<Char> chars = new List<char>();
 
+            //parse each letter
             foreach (char c in text.ToCharArray())
             {
+                //What does the letter mean for the conversion?
                 switch(c)
                 {
                     case '(':
@@ -49,7 +60,7 @@ namespace FormeleMethode
                         currentMode = Mode.dot;
                         break;
                     default:
-                        switch (currentMode)
+                        switch (currentMode) //the mode is important for handling the dot, or and one
                         {
                             case Mode.nothing:
                                 if (regex.left == null && regex.right == null && regex.terminals == "") regex = new RegExp(c.ToString());
@@ -66,7 +77,7 @@ namespace FormeleMethode
                 }
 
             }
-            if (chars.Count != 0)
+            if (chars.Count != 0) //makes sure a Regexp object is properly closed off.
             {
                 RegExp reg = new RegExp();
                 foreach (Char ch in chars)

@@ -21,7 +21,9 @@ namespace FormeleMethode
         }
     }
 
-
+    /// <summary>
+    /// Class made by Paul de Mast in Java, rewritten to C# to work with Regex.
+    /// </summary>
     public class RegExp
     {
         // De mogelijke operatoren voor een reguliere expressie (+, *, |, .) 
@@ -34,6 +36,9 @@ namespace FormeleMethode
         public Operator _operator;
         public String terminals;
 
+        /// <summary>
+        /// Single letters
+        /// </summary>
         public RegExp()
         {
             _operator = Operator.ONE;
@@ -42,6 +47,10 @@ namespace FormeleMethode
             right = null;
         }
 
+        /// <summary>
+        /// Single letters
+        /// </summary>
+        /// <param name="p"></param>
         public RegExp(String p)
         {
             _operator = Operator.ONE;
@@ -50,6 +59,10 @@ namespace FormeleMethode
             right = null;
         }
 
+        /// <summary>
+        /// + symbol
+        /// </summary>
+        /// <returns></returns>
         public RegExp plus()
         {
             RegExp result = new RegExp();
@@ -58,6 +71,10 @@ namespace FormeleMethode
             return result;
         }
 
+        /// <summary>
+        /// * symbol
+        /// </summary>
+        /// <returns></returns>
         public RegExp star()
         {
             RegExp result = new RegExp();
@@ -66,6 +83,11 @@ namespace FormeleMethode
             return result;
         }
 
+        /// <summary>
+        /// | symbol
+        /// </summary>
+        /// <param name="e2"></param>
+        /// <returns></returns>
         public RegExp or(RegExp e2)
         {
             RegExp result = new RegExp();
@@ -75,6 +97,11 @@ namespace FormeleMethode
             return result;
         }
 
+        /// <summary>
+        /// . symbol
+        /// </summary>
+        /// <param name="e2"></param>
+        /// <returns></returns>
         public RegExp dot(RegExp e2)
         {
             RegExp result = new RegExp();

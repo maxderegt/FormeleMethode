@@ -4,8 +4,18 @@ using System.Text;
 
 namespace FormeleMethode
 {
+    /// <summary>
+    /// Class used for generating DFA's that need specific requirements
+    /// Can generate the following DFA's :begin with, contains, ends with
+    /// </summary>
     class GenerateDFA
     {
+        /// <summary>
+        /// Generates a DFA that starts with the text in var: beginsWithText taking into account the alphabet 
+        /// </summary>
+        /// <param name="beginsWithText">What text does it need to start with?</param>
+        /// <param name="alphabet">What letters are in the language?</param>
+        /// <returns></returns>
         public static List<Node> GenerateDFABeginsWith(string beginsWithText, string alphabet)
         {
             int count = 3;
@@ -64,6 +74,12 @@ namespace FormeleMethode
             return DFA_BW;
         }
 
+        /// <summary>
+        /// Generates a DFA that ends with the text in var: endsWithText taking into account the alphabet 
+        /// </summary>
+        /// <param name="endsWithText">What text does it need to end with?</param>
+        /// <param name="alphabet">What letters are in the language?</param>
+        /// <returns></returns>
         public static List<Node> GenerateDFAEndsWith(string endsWithText, string alphabet)
         {
             int count = 2;
@@ -149,11 +165,16 @@ namespace FormeleMethode
                 }
             }
             
-
             return DFA_EW;
         }
 
-        public static List<Node> GenerateDFAContains(string endsWithText, string alphabet)
+        /// <summary>
+        /// Generates a DFA that contains the text in var: containsText taking into account the alphabet 
+        /// </summary>
+        /// <param name="containsText">What text does it need to contain?</param>
+        /// <param name="alphabet">What letters are in the language?</param>
+        /// <returns></returns>
+        public static List<Node> GenerateDFAContains(string containsText, string alphabet)
         {
             int count = 2;
             List<Node> DFA_C = new List<Node>() //slightly less code when saying q2 is the startnode
@@ -165,9 +186,9 @@ namespace FormeleMethode
             DFA_C[1].AddConnections(new List<Connection>());
 
             //all nodes added
-            foreach (char c in endsWithText.ToCharArray())
+            foreach (char c in containsText.ToCharArray())
             {
-                if (count != endsWithText.Length + 1)
+                if (count != containsText.Length + 1)
                 {
                     DFA_C.Add(new Node(new List<Connection>(), "q" + count, NodeType.NormalNode));
                     DFA_C[count - 1].AddConnection(new Connection(c, DFA_C[count]));
@@ -184,7 +205,7 @@ namespace FormeleMethode
             count = 2;
             String text = "";
             //let's see how far each node moves back depending on the letter
-            foreach (char c in endsWithText.ToCharArray())
+            foreach (char c in containsText.ToCharArray())
             {
                 foreach (char ch in alphabet.ToCharArray())
                 {
@@ -201,7 +222,7 @@ namespace FormeleMethode
                             for (int i = count - 2; i > 0; i--) //look up one node back at a time
                             {
                                 String txt = text + ch;
-                                if (txt.EndsWith(endsWithText.Substring(0, i)))
+                                if (txt.EndsWith(containsText.Substring(0, i)))
                                 {
                                     found = true;
                                     DFA_C[count - 1].AddConnection(new Connection(ch, DFA_C[i + 1]));
@@ -222,7 +243,6 @@ namespace FormeleMethode
             {
                 DFA_C[0].AddConnection(new Connection(ch, DFA_C[0]));
             }
-
 
             return DFA_C;
         }
