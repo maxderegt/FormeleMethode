@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace FormeleMethode
 {
@@ -12,10 +10,10 @@ namespace FormeleMethode
             nonMinimizedDFA = RemoveStates(nonMinimizedDFA); //removes all unused states before optimizing
 
             //step 2, equivalent states are merged together
-            DFA minimizedDFA = Minimize(nonMinimizedDFA);
+            nonMinimizedDFA = Minimize(nonMinimizedDFA);
 
             //step 3, partitioning
-
+            DFA minimizedDFA = Partitioning(nonMinimizedDFA);
 
             return minimizedDFA;
         }
@@ -78,7 +76,7 @@ namespace FormeleMethode
             bool optimized = false;
             DFA minimizedDFA = nonMinimizedDFA;
 
-            while (!optimized)
+            while (!optimized) //this ensures we keep looping though all nodes untill we are 100% certain there can't be any more optimizations
             {
                 optimized = true;
                 Node node1ToOptimize = null;
@@ -95,13 +93,13 @@ namespace FormeleMethode
                     {
                         if (!optimized) break;
                         if (node1 == node2) continue; //no use checking a connection with the same node
-                        if(node1.connections.Count == node2.connections.Count && node1.connections.Count != 0) //equivalent in connection count and more then 0 connections
+                        if (node1.connections.Count == node2.connections.Count && node1.connections.Count != 0) //equivalent in connection count and more then 0 connections
                         {
                             bool match = true;
                             int index = 0;
                             while (index < node1.connections.Count)
-                            { 
-                                if (node1.connections[index].letter != node2.connections[index].letter || node1.connections[index].node.name != node2.connections[index].node.name || node1.nodeType != node2.nodeType) 
+                            {
+                                if (node1.connections[index].letter != node2.connections[index].letter || node1.connections[index].node.name != node2.connections[index].node.name || node1.nodeType != node2.nodeType)
                                 {
                                     match = false;
                                     break;
@@ -119,21 +117,19 @@ namespace FormeleMethode
                     node1Index++;
                 }
 
-                if (!optimized)
+                if (!optimized) //2 nodes were found that could be combined
                 {
-                    //optimizing
-
                     //create new node
                     Node newnode = new Node(node1ToOptimize.connections, node1ToOptimize.name + node2ToOptimize.name, node1ToOptimize.nodeType);
                     minimizedDFA.Nodes.Add(newnode);
 
                     //find all connections
-                    for(int i = 0; i < minimizedDFA.Nodes.Count; i++)
+                    for (int i = 0; i < minimizedDFA.Nodes.Count; i++)
                     {
-                        for(int j = 0; j < minimizedDFA.Nodes[i].connections.Count; j++)
+                        for (int j = 0; j < minimizedDFA.Nodes[i].connections.Count; j++)
                         {
                             if (minimizedDFA.Nodes[i].connections[j].node.name == node1ToOptimize.name || minimizedDFA.Nodes[i].connections[j].node.name == node2ToOptimize.name)
-                                minimizedDFA.Nodes[i].connections[j].node = minimizedDFA.Nodes[minimizedDFA.Nodes.Count - 1];
+                                minimizedDFA.Nodes[i].connections[j].node = minimizedDFA.Nodes[minimizedDFA.Nodes.Count - 1]; //make all old connections point to the new node
                         }
                     }
 
@@ -143,6 +139,17 @@ namespace FormeleMethode
                 }
             }
 
+            return minimizedDFA;
+        }
+
+        /// <summary>
+        /// Used for step 3 of HopCroft's algorithm
+        /// </summary>
+        /// <param name="nonMinimizedDFA"></param>
+        /// <returns></returns>
+        private static DFA Partitioning(DFA nonMinimizedDFA)
+        {
+            DFA minimizedDFA = nonMinimizedDFA;
             return minimizedDFA;
         }
     }
