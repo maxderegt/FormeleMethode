@@ -2,7 +2,6 @@
 using DotNetGraph.Edge;
 using DotNetGraph.Extensions;
 using DotNetGraph.Node;
-using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.Drawing;

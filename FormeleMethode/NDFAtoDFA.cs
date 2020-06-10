@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 
 namespace FormeleMethode
 {
@@ -547,6 +544,8 @@ namespace FormeleMethode
             return nodes;
         }
 
+        #region oldToDFA
+        /*
         //deprecated Functions, not to be used
         public static DFA ToDFA(NDFA ndfa)
         {
@@ -565,6 +564,7 @@ namespace FormeleMethode
 
             return ConvertTableToDFA(myList, ndfa);
         }
+
         private static DFA ConvertTableToDFA(List<Row> myList, NDFA ndfa)
         {
             Node startnode = null;
@@ -755,5 +755,7 @@ namespace FormeleMethode
 
             return new DFA(startnode, ndfa.Nodes);
         }
+        */
+        #endregion
     }
 }

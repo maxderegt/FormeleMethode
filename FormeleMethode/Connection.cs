@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace FormeleMethode
+﻿namespace FormeleMethode
 {
     //This class handles the Connection from node to node.
     // Letter is the character that allowed for the connection

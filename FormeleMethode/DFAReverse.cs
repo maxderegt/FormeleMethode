@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Diagnostics.CodeAnalysis;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace FormeleMethode
 {
