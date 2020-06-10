@@ -29,8 +29,8 @@ namespace FormeleMethode
         public string Check(string s)
         {
             bool Endnode = false;
-            Match match = rg.Match(s);
-            Endnode = match.Value == s? true: false;
+            Match match = rg.Match(s); //returns the found matches
+            Endnode = match.Value == s? true: false; //checks if it is a full word match
             return new string($"Regex {s} is {Endnode}");
         }
 
@@ -42,8 +42,8 @@ namespace FormeleMethode
         private bool CheckBool(string s)
         {
             //bool Endnode = false;
-            Match match = rg.Match(s);
-            return match.Value == s ? true : false;
+            Match match = rg.Match(s); //returns the found matches
+            return match.Value == s ? true : false; //checks if it is a full word match
         }
 
         /// <summary>
@@ -54,18 +54,18 @@ namespace FormeleMethode
         /// <returns>A list of all valid words</returns>
         public List<String> geefTaalTotN(int n, string alphabet)
         {
-            List<String> acceptedWords = new List<string>();
-            List<string> strings = GenerateStrings.GenerateString(n, alphabet);
+            List<String> acceptedWords = new List<string>(); //list of accepted words
+            List<string> strings = GenerateStrings.GenerateString(n, alphabet); //generates a list of all strings that will be checked
 
-            foreach (string item in strings)
+            foreach (string item in strings) //check each word in strings to find all valid words
             {
                 if (CheckBool(item))
                 {
-                    acceptedWords.Add(item);
+                    acceptedWords.Add(item); //word was valid and added to the list
                 }
             }
 
-            return acceptedWords;
+            return acceptedWords; 
         }
 
         /// <summary>
@@ -76,14 +76,14 @@ namespace FormeleMethode
         /// <returns>A list of all invalid words</returns>
         public List<String> geefFoutieveTaalTotN(int n, string alphabet)
         {
-            List<String> nonAcceptedWords = new List<string>();
-            List<string> strings = GenerateStrings.GenerateString(n, alphabet);
+            List<String> nonAcceptedWords = new List<string>(); //list of non accepted words
+            List<string> strings = GenerateStrings.GenerateString(n, alphabet); //generates a list of all strings that will be checked
 
-            foreach (string item in strings)
+            foreach (string item in strings) //check each word in strings to find all valid words
             {
                 if (!CheckBool(item))
                 {
-                    nonAcceptedWords.Add(item);
+                    nonAcceptedWords.Add(item); //word was invalid and added to the list
                 }
             }
 

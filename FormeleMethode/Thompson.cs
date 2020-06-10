@@ -7,6 +7,7 @@ namespace FormeleMethode
 {
     /// <summary>
     /// This class creates an NDFA given a Regex that is created with the RegExp class
+    /// See FOR lesson 2 powerpoint for what each letter means (sheets 14 to 19)
     /// </summary>
     public class Thompson
     {
@@ -17,179 +18,172 @@ namespace FormeleMethode
         /// <returns> a list of nodes from which to create a NDFA</returns>
         public static List<Node> CreateAutomaat(RegExp reg)
         {
-            List<Node> automaat = new List<Node>()
-            {
-                new Node("q0", NodeType.StartNode),
-                new Node("q1", NodeType.EndNode)
+            List<Node> automaton = new List<Node>() { //our list of nodes, initialized with a start and end node, they are a given for any automaton
+                new Node(new List<Connection>(), "q0", NodeType.StartNode), //node a
+                new Node(new List<Connection>(), "q1", NodeType.EndNode)    //node b
             };
-            automaat[0].AddConnections(new List<Connection>());
-            automaat[1].AddConnections(new List<Connection>());
 
+            //leftstate is initially the startnode, rightstate the endnode, statecounter keeps track of the last node in automaton
             int stateCounter = 1, leftState = 0, rightState = 1;
 
-            ModifyAutomaat(reg, automaat, stateCounter, leftState, rightState);
+            ModifyAutomaat(reg, automaton, stateCounter, leftState, rightState);
 
-            return automaat;
+            return automaton;
         }
 
         /// <summary>
         /// Handles the different operators (+*|. en ONE) and sends everything to the right 'rule' to be handled.
         /// </summary>
         /// <param name="reg">the regular expression created with the RegExp class</param>
-        /// <param name="automaat">the NDFA</param>
+        /// <param name="automaton">the NDFA</param>
         /// <param name="stateCounter">keeps track of the next state to add</param>
         /// <param name="leftState">From state</param>
         /// <param name="rightState">To state</param>
-        private static void ModifyAutomaat(RegExp reg, List<Node> automaat, int stateCounter, int leftState, int rightState)
+        private static void ModifyAutomaat(RegExp reg, List<Node> automaton, int stateCounter, int leftState, int rightState)
         {
-            switch (reg._operator)
+            switch (reg._operator) //checking which operator has to be handled and sends it to the right rule
             {
                 case RegExp.Operator.PLUS:
-                    Regel5(reg, automaat, stateCounter, leftState, rightState);
+                    Regel5(reg, automaton, stateCounter, leftState, rightState);
                     break;
             case RegExp.Operator.STAR:
-                Regel6(reg, automaat, stateCounter, leftState, rightState);
+                Regel6(reg, automaton, stateCounter, leftState, rightState);
                 break;
             case RegExp.Operator.OR:
-                Regel4(reg, automaat, stateCounter, leftState, rightState);
+                Regel4(reg, automaton, stateCounter, leftState, rightState);
                 break;
                 case RegExp.Operator.DOT:
-                    Regel3(reg, automaat, stateCounter, leftState, rightState);
+                    Regel3(reg, automaton, stateCounter, leftState, rightState);
                     break;
                 case RegExp.Operator.ONE:
-                    Regel1En2(reg, automaat, stateCounter, leftState, rightState);
+                    Regel1En2(reg, automaton, stateCounter, leftState, rightState);
                     break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+                default: 
+                    throw new ArgumentOutOfRangeException(); //if this gets triggered it would mean that there is a new operator in RegExp
             }
         }
         /// <summary>
         /// The translation of a single terminal symbol and an empty production(one) (rule 1 and 2)
         /// </summary>
         /// <param name="reg">the regular expression created with the RegExp class</param>
-        /// <param name="automaat">the NDFA</param>
+        /// <param name="automaton">the NDFA</param>
         /// <param name="stateCounter">keeps track of the next state to add</param>
         /// <param name="leftState">From state</param>
         /// <param name="rightState">To state</param>
-        public static void Regel1En2(RegExp reg, List<Node> automaat, int stateCounter, int leftState, int rightState)
+        public static void Regel1En2(RegExp reg, List<Node> automaton, int stateCounter, int leftState, int rightState)
         {
-            char symbol = reg.terminals.First();
-
-            automaat[leftState].AddConnections(new List<Connection>()
-            {
-                new Connection(symbol, automaat[rightState])
-            });
+            //only the first letter is used
+            char symbol = reg.terminals.First(); //terminals contains the letter for the connection to go from node[leftState] to node[rightState]
+            automaton[leftState].AddConnection(new Connection(symbol, automaton[rightState])); //from a to b
         }
 
         /// <summary>
         /// Translation from concatenation (dot) (rule 3)
         /// </summary>
         /// <param name="reg">the regular expression created with the RegExp class</param>
-        /// <param name="automaat">the NDFA</param>
+        /// <param name="automaton">the NDFA</param>
         /// <param name="stateCounter">keeps track of the next state to add</param>
         /// <param name="leftState">From state</param>
         /// <param name="rightState">To state</param>
-        public static void Regel3(RegExp reg, List<Node> automaat, int stateCounter, int leftState, int rightState)
+        public static void Regel3(RegExp reg, List<Node> automaton, int stateCounter, int leftState, int rightState)
         {
             var newState = stateCounter + 1;
             stateCounter = newState;
+            //node c, a dot means that there is atleast 1 new node
+            automaton.Add(new Node(new List<Connection>(), "q" + newState, NodeType.NormalNode));
 
-            automaat.Add(new Node("q" + newState, NodeType.NormalNode));
-            automaat[newState].AddConnections(new List<Connection>());
-
-            ModifyAutomaat(reg.left, automaat, stateCounter, leftState, newState);
-            ModifyAutomaat(reg.right, automaat, stateCounter, newState, rightState);
+            ModifyAutomaat(reg.left, automaton, stateCounter, leftState, newState); //handle left side of the dot
+            ModifyAutomaat(reg.right, automaton, stateCounter, newState, rightState); //handle right side of the dot
         }
 
         /// <summary>
         /// The translation of the choice operator (or) (rule 4)
         /// </summary>
         /// <param name="reg">the regular expression created with the RegExp class</param>
-        /// <param name="automaat">the NDFA</param>
+        /// <param name="automaton">the NDFA</param>
         /// <param name="stateCounter">keeps track of the next state to add</param>
         /// <param name="leftState">From state</param>
         /// <param name="rightState">To state</param>
-        public static void Regel4(RegExp reg, List<Node> automaat, int stateCounter, int leftState, int rightState)
+        public static void Regel4(RegExp reg, List<Node> automaton, int stateCounter, int leftState, int rightState)
         {
-            //the first path to handle
+            //the first path to handle (left side)
             var newLeftState = stateCounter + 1;
             var newRightState = newLeftState + 1;
             stateCounter = newRightState;
 
-            automaat.Add(new Node("q" + newLeftState, NodeType.NormalNode));
-            automaat.Add(new Node("q" + newRightState, NodeType.NormalNode));
-            automaat[newLeftState].AddConnections(new List<Connection>());
-            automaat[newRightState].AddConnections(new List<Connection>());
+            //node c, add a new node for the or left side(the first epsilon) 
+            automaton.Add(new Node(new List<Connection>(), "q" + newLeftState, NodeType.NormalNode));
 
-            automaat[leftState].AddConnection(new Connection('ϵ', automaat[newLeftState]));
-            automaat[newRightState].AddConnection(new Connection('ϵ', automaat[rightState]));
+            //node d, the new node has a connection to automaton[rightState] with epsilon (the last epsilon)
+            automaton.Add(new Node(new List<Connection>() { new Connection('ϵ', automaton[rightState]) }, "q" + newRightState, NodeType.NormalNode)); //from d to b
+            automaton[leftState].AddConnection(new Connection('ϵ', automaton[newLeftState])); //from a to c
 
-            ModifyAutomaat(reg.left, automaat, stateCounter, newLeftState, newRightState);
+            ModifyAutomaat(reg.left, automaton, stateCounter, newLeftState, newRightState); //handle left side of the or
 
-            //there are 2 paths to handle, this handles the second one
+            //there are 2 paths to handle, this handles the second one (right side)
             newLeftState = stateCounter + 1;
             newRightState = newLeftState + 1;
             stateCounter = newRightState;
-            automaat.Add(new Node("q" + newLeftState, NodeType.NormalNode));
-            automaat.Add(new Node("q" + newRightState, NodeType.NormalNode));
-            automaat[newLeftState].AddConnections(new List<Connection>());
-            automaat[newRightState].AddConnections(new List<Connection>());
-            automaat[leftState].AddConnection(new Connection('ϵ', automaat[newLeftState]));
-            automaat[newRightState].AddConnection(new Connection('ϵ', automaat[rightState]));
-            ModifyAutomaat(reg.right, automaat, stateCounter, newLeftState, newRightState);
+
+            //node e, add a new node for the or right side (the first epsilon)
+            automaton.Add(new Node(new List<Connection>(), "q" + newLeftState, NodeType.NormalNode));
+
+            //node f, the new node has a connection to automaton[rightState] with epsilon (the last epsilon)
+            automaton.Add(new Node(new List<Connection>() { new Connection('ϵ', automaton[rightState]) }, "q" + newRightState, NodeType.NormalNode)); //from f to b
+            automaton[leftState].AddConnection(new Connection('ϵ', automaton[newLeftState])); //from a to e
+
+            ModifyAutomaat(reg.right, automaton, stateCounter, newLeftState, newRightState); //handle right side of the or
         }
 
         /// <summary>
         /// The translation of the plus operator (+) (rule 5)
         /// </summary>
         /// <param name="reg">the regular expression created with the RegExp class</param>
-        /// <param name="automaat">the NDFA</param>
+        /// <param name="automaton">the NDFA</param>
         /// <param name="stateCounter">keeps track of the next state to add</param>
         /// <param name="leftState">From state</param>
         /// <param name="rightState">To state</param>
-        public static void Regel5(RegExp reg, List<Node> automaat, int stateCounter, int leftState, int rightState)
+        public static void Regel5(RegExp reg, List<Node> automaton, int stateCounter, int leftState, int rightState)
         {
             var newLeftState = stateCounter + 1;
             var newRightState = newLeftState + 1;
             stateCounter = newRightState;
 
-            automaat.Add(new Node("q" + newLeftState, NodeType.NormalNode));
-            automaat.Add(new Node("q" + newRightState, NodeType.NormalNode));
-            automaat[newLeftState].AddConnections(new List<Connection>());
-            automaat[newRightState].AddConnections(new List<Connection>());
+            //add 2 new nodes for the + operator
+            automaton.Add(new Node(new List<Connection>(), "q" + newLeftState, NodeType.NormalNode)); //node c
+            automaton.Add(new Node(new List<Connection>(), "q" + newRightState, NodeType.NormalNode)); //node d
 
-            automaat[leftState].AddConnection(new Connection('ϵ', automaat[newLeftState]));
-            automaat[newRightState].AddConnection(new Connection('ϵ', automaat[rightState]));
-            automaat[newRightState].AddConnection(new Connection('ϵ', automaat[newLeftState]));
+            automaton[leftState].AddConnection(new Connection('ϵ', automaton[newLeftState])); //from a to c
+            automaton[newRightState].AddConnection(new Connection('ϵ', automaton[rightState])); //from d to b
+            automaton[newRightState].AddConnection(new Connection('ϵ', automaton[newLeftState])); //from d to c
 
-            ModifyAutomaat(reg.left, automaat, stateCounter, newLeftState, newRightState);
+            ModifyAutomaat(reg.left, automaton, stateCounter, newLeftState, newRightState); //a plus operator has no right side 
         }
 
         /// <summary>
         /// The translation of the star operator (*) (rule 6)
         /// </summary>
         /// <param name="reg">the regular expression created with the RegExp class</param>
-        /// <param name="automaat">the NDFA</param>
+        /// <param name="automaton">the NDFA</param>
         /// <param name="stateCounter">keeps track of the next state to add</param>
         /// <param name="leftState">From state</param>
         /// <param name="rightState">To state</param>
-        public static void Regel6(RegExp reg, List<Node> automaat, int stateCounter, int leftState, int rightState)
+        public static void Regel6(RegExp reg, List<Node> automaton, int stateCounter, int leftState, int rightState)
         {
             var newLeftState = stateCounter + 1;
             var newRightState = newLeftState + 1;
             stateCounter = newRightState;
 
-            automaat.Add(new Node("q" + newLeftState, NodeType.NormalNode));
-            automaat.Add(new Node("q" + newRightState, NodeType.NormalNode));
-            automaat[newLeftState].AddConnections(new List<Connection>());
-            automaat[newRightState].AddConnections(new List<Connection>());
+            automaton.Add(new Node(new List<Connection>(), "q" + newLeftState, NodeType.NormalNode)); //node c
+            automaton.Add(new Node(new List<Connection>(), "q" + newRightState, NodeType.NormalNode)); //node d
 
-            automaat[leftState].AddConnection(new Connection('ϵ', automaat[rightState]));
-            automaat[leftState].AddConnection(new Connection('ϵ', automaat[newLeftState]));
-            automaat[newRightState].AddConnection(new Connection('ϵ', automaat[rightState]));
-            automaat[newRightState].AddConnection(new Connection('ϵ', automaat[newLeftState]));
+            automaton[leftState].AddConnection(new Connection('ϵ', automaton[rightState])); //from a to b
+            automaton[leftState].AddConnection(new Connection('ϵ', automaton[newLeftState])); //from a to c
+            automaton[newRightState].AddConnection(new Connection('ϵ', automaton[rightState])); //from d to b
+            automaton[newRightState].AddConnection(new Connection('ϵ', automaton[newLeftState])); //from d to c
 
-            ModifyAutomaat(reg.left, automaat, stateCounter, newLeftState, newRightState);
+            //rule 6 has no right state (*) so we only need to check the left state
+            ModifyAutomaat(reg.left, automaton, stateCounter, newLeftState, newRightState);
         }
     }
 }
