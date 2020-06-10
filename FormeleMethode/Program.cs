@@ -143,9 +143,50 @@ namespace FormeleMethode
             foreach (string item in strings)
             {
                 Console.WriteLine(StartsWithABBorEndsWithBAAB.Check(item));
-            }
-            CreateGraph(DFA_STARTW_ABB_OR_ENDSW_BAAB_Nodes, "DFA_STARTWABBORENDSWBAAB");
+            }            
+            CreateGraph(StartsWithABBorEndsWithBAAB.Nodes, "DFA_STARTWABBORENDSWBAAB");
 
+            #endregion
+
+            #region HopCroft
+            List<Node> HopCraftNodes = new List<Node>()
+            {
+                new Node("q0", NodeType.StartNode),
+                new Node("q1", NodeType.NormalNode),
+                new Node("q2", NodeType.EndNode),
+                new Node("q3", NodeType.NormalNode),
+                new Node("q4", NodeType.NormalNode)
+            };
+
+            HopCraftNodes[0].AddConnections(new List<Connection>()
+            {
+                new Connection('a', HopCraftNodes[1]),
+                new Connection('b', HopCraftNodes[2])
+            });
+            HopCraftNodes[1].AddConnections(new List<Connection>()
+            {
+                new Connection('a', HopCraftNodes[3]),
+                new Connection('b', HopCraftNodes[0])
+            });
+            HopCraftNodes[2].AddConnections(new List<Connection>()
+            {
+                new Connection('a', HopCraftNodes[2]),
+                new Connection('b', HopCraftNodes[4])
+            });
+            HopCraftNodes[3].AddConnections(new List<Connection>()
+            {
+                new Connection('a', HopCraftNodes[2]),
+                new Connection('b', HopCraftNodes[1])
+            });
+            HopCraftNodes[4].AddConnections(new List<Connection>()
+            {
+                new Connection('a', HopCraftNodes[2]),
+                new Connection('b', HopCraftNodes[1])
+            });
+
+            DFA HopCraft = new DFA(HopCraftNodes[0], HopCraftNodes);
+            HopCraft = HopCroft.MinimizeHopCroft(HopCraft);
+            CreateGraph(HopCraft.Nodes, "DFA_HopCroft");
             #endregion
 
             #region NDFA
