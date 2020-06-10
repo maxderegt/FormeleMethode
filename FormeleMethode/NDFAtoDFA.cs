@@ -49,6 +49,7 @@ namespace FormeleMethode
         public static DFA ToDFA2(NDFA ndfa)
         {
             Nodes.Clear();
+            letters.Clear();
             List<Row> myList = GenerateTable(ndfa);
             if (Fuik == null)
             {
